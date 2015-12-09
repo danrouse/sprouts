@@ -33,11 +33,14 @@ body, input, button, select {
 }
 button, input[type="submit"] {
   background-color: $color-blue;
-  transition: 0.2s $transition;
+  transition: background-color $transition;
   border: 0;
 
   &:hover {
     cursor: pointer;
+  }
+
+  &:hover, &.active {
     background-color: $color-lblue;
   }
 
@@ -64,6 +67,12 @@ button, input[type="submit"] {
   }
     .App-main {
       flex-grow: 1;
+      transition: transform $transition;
+      overflow-x: auto;
+
+      &.withOptions {
+        transform: translateX(50%);
+      }
     }
       .IpaInput {
         position: relative;
@@ -137,4 +146,8 @@ button, input[type="submit"] {
       margin-right: 0;
     }
   }
+}
+
+.ReactModal__Overlay {
+  background-color: color($color-lblue a(80%)) !important;
 }

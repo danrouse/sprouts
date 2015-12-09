@@ -2,22 +2,23 @@
 
 .OptionsMenu {
   padding: 16px;
-  background-color: $color-tan;
-
+  background-color: $color-lblue;
+  
   position: absolute;
-  z-index: 10;
-  top: 0;
   left: 0;
-  height: 100%;
+  top: 0;
+  bottom: 0;
+  width: 50%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   transition: transform $transition;
+
+  overflow-y: auto;
 
 
   /*resize: horizontal;
   overflow-y: scroll;*/
 
   &.hidden {
-
     transform: translateX(-100%);
   }
 }

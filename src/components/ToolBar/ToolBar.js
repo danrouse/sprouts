@@ -7,10 +7,16 @@ export default class ToolBar extends Component {
       <div className="ToolBar">
         {this.props.items.map((item, i) => {
           if(item === 'divider') {
-            return <div className="ToolBar-divider" />;
+            return <div key={i} className="ToolBar-divider" />;
           } else {
             return (
-              <button key={item.text + i} onClick={item.onClick}>{item.text}</button>
+              <button key={i}
+                className={item.isActive ? 'active' : ''}
+                onClick={item.onClick}
+                onMouseOver={item.onMouseOver}
+                onMouseOut={item.onMouseOut}>
+                {item.text}
+              </button>
             );
           }
         })}
@@ -25,6 +31,7 @@ ToolBar.propTypes = {
       PropTypes.string,
       PropTypes.shape({
         onClick: PropTypes.func,
+        onMouseOver: PropTypes.func,
         text: PropTypes.string,
       })
     ])

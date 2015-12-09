@@ -70,14 +70,26 @@ export default class App extends Component {
       selectedNode: rootNode,
       displayOptions: displayOptions,
       showModal: '',
-      showOptions: false
+      showOptions: false,
+      statusText: '',
     };
   }
 
   showModal(modalName) { this.setState({ showModal: modalName }); }
+
   hideModal() { this.setState({ showModal: '' }); }
+
   showOptions() { this.setState({ showOptions: !this.state.showOptions }); }
+
   hideOptions() { this.setState({ showOptions: false }); }
+
+  setStatus(statusText) {
+    this.setState({ statusText });
+  }
+
+  clearStatus() {
+    this.setState({ statusText: '' });
+  }
 
   updateDisplayOption(option, event) {
     let val = event.target.value;
@@ -94,6 +106,10 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * Destroy the current tree and create an empty one
+   * Resets most of the UI state
+   */
   clearTree() {
     const rootNode = textToTree('[]', this.state.displayOptions);
 
@@ -180,6 +196,9 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * Regenerates the tree when the input text is changed
+   */
   onTextChange(nextText) {
     this.setState({
       textInput: nextText,
@@ -187,6 +206,9 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * Regenerates the text value when the tree is changed manually
+   */
   onTreeChange(nextTree) {
     const nextText = nextTree.toString();
 
@@ -195,14 +217,23 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * Select a TreeNode when it's clicked
+   */
   onNodeClicked(node, event) {
     this.setState({
       selectedNode: node
     });
+
+    // This is bound to all TreeNodes, but is called by the target first
     event.stopPropagation();
   }
 
+  /**
+   * Bind keys to actions (keyboard controls)
+   */
   onKeyDown(event) {
+    // Don't steal input events from their real targets
     const nodeName = event.target.nodeName;
     if(nodeName === 'INPUT' || nodeName === 'TEXTAREA' || nodeName === 'SELECT') {
       return;
@@ -210,16 +241,21 @@ export default class App extends Component {
 
     const key = keyCodes[event.keyCode] || String.fromCharCode(event.keyCode);
     switch(key) {
+      // Keyboard tree traversal
       case 'UPARROW':
+      case 'W':
         this.moveSelectionUp();
         break;
       case 'DOWNARROW':
+      case 'S':
         this.moveSelectionDown();
         break;
       case 'LEFTARROW':
+      case 'A':
         this.moveSelectionLeft();
         break;
       case 'RIGHTARROW':
+      case 'D':
         this.moveSelectionRight();
         break;
     }
@@ -228,6 +264,10 @@ export default class App extends Component {
   onKeyUp(event) {
   }
 
+  /**
+   * Set up global event listeners
+   * @return {[type]} [description]
+   */
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown.bind(this));
     document.addEventListener('keyup', this.onKeyUp.bind(this));
@@ -239,21 +279,40 @@ export default class App extends Component {
       <div className="App">
         <TitleBar>🍂 Sprouts - Syntax Tree Builder</TitleBar>
         <ToolBar items={[
-          { text: '☰ Options', onClick: this.showOptions.bind(this) },
-          { text: '＋ New', onClick: this.showModal.bind(this, 'new') },
-          { text: '💾 Save', onClick: this.showModal.bind(this, 'save') },
-          { text: '⛬ Share', onClick: this.showModal.bind(this, 'share') },
+          { text: '☰ Options',
+            onClick: this.showOptions.bind(this),
+            onMouseOver: this.setStatus.bind(this, 'Show the tree display options.'),
+            onMouseOut: this.clearStatus.bind(this),
+            isActive: this.state.showOptions },
+          { text: '＋ New',
+            onClick: this.showModal.bind(this, 'new'),
+            onMouseOver: this.setStatus.bind(this, 'Clear the current tree and create a new one.'),
+            onMouseOut: this.clearStatus.bind(this),
+            isActive: this.state.showModal === 'new' },
+          { text: '💾 Save',
+            onClick: this.showModal.bind(this, 'save'),
+            onMouseOver: this.setStatus.bind(this, 'Download this tree as a PNG or SVG file.'),
+            onMouseOut: this.clearStatus.bind(this),
+            isActive: this.state.showModal === 'save' },
+          { text: '⛬ Share',
+            onClick: this.showModal.bind(this, 'share'),
+            onMouseOver: this.setStatus.bind(this, 'Share a link to this tree.'),
+            onMouseOut: this.clearStatus.bind(this),
+            isActive: this.state.showModal === 'share' },
           'divider',
-          { text: 'New', onClick: this.clearTree.bind(this) },
-          { text: 'New', onClick: this.clearTree.bind(this) },
-          { text: 'New', onClick: this.clearTree.bind(this) },
+          { text: 'New',
+            onClick: this.clearTree.bind(this) },
+          { text: 'New',
+            onClick: this.clearTree.bind(this) },
+          { text: 'New',
+            onClick: this.clearTree.bind(this) },
           ]}/>
         <div className="App-inner">
           <OptionsMenu
             hidden={!this.state.showOptions}
             onChange={this.updateDisplayOption.bind(this)}
             options={this.state.displayOptions} />
-          <div className="App-main">
+          <div className={'App-main' + (this.state.showOptions ? ' withOptions' : '')}>
             <IpaInput value={this.state.textInput}
               showName={false}
               onChange={this.onTextChange.bind(this)} />
@@ -265,14 +324,14 @@ export default class App extends Component {
             </div>
           </div>
         </div>
-        <StatusBar>Selected node: {this.state.selectedNode.name}</StatusBar>
+        <StatusBar>{this.state.statusText}</StatusBar>
 
         <Modal isOpen={this.state.showModal === 'new'}
           style={modalStyle}
           onRequestClose={this.hideModal.bind(this)}>
           Starting a new tree will erase any unsaved changes. Are you sure you want to proceed?
           <div className="buttonGroup">
-            <button onClick={this.clearTree.bind(this)} className="go">Proceed</button>
+            <button onClick={this.clearTree.bind(this)}>Proceed</button>
             <button onClick={this.hideModal.bind(this)} className="cancel">Cancel</button>
           </div>
         </Modal>
@@ -280,8 +339,8 @@ export default class App extends Component {
           style={modalStyle}
           onRequestClose={this.hideModal.bind(this)}>
           <div className="buttonGroup">
-            <button onClick={this.saveTreeAsPNG.bind(this)} className="go">.PNG</button>
-            <button onClick={this.saveTreeAsSVG.bind(this)} className="go">.SVG</button>
+            <button onClick={this.saveTreeAsPNG.bind(this)}>.PNG</button>
+            <button onClick={this.saveTreeAsSVG.bind(this)}>.SVG</button>
           </div>
         </Modal>
         <Modal isOpen={this.state.showModal === 'share'}

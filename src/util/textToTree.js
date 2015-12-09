@@ -10,7 +10,6 @@ function parseToken(token) {
   if(astIndex !== -1) {
     ref = body.substr(astIndex + 1).trim();
     body = body.substr(0, astIndex).trim();
-    console.log('ref', name, body);
   }
   return [ name, body, ref ];
 }
