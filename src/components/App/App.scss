@@ -21,7 +21,6 @@ html{box-sizing:border-box}
 /*
  * happy little clean slate here
  */
-
 @import '../variables.scss';
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic);
 
@@ -29,10 +28,31 @@ html, body, #root, .App {
   height: 100%;
 }
 
+body, input, button, select {
+  font-family: Roboto;
+}
+button, input[type="submit"] {
+  background-color: $color-blue;
+  transition: 0.2s $transition;
+  border: 0;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $color-lblue;
+  }
+
+  &.cancel {
+    background-color: $color-red;
+
+    &:hover {
+      background-color: color($color-red lightness(+15%));
+    }
+  }
+}
+
 .App {
   display: flex;
   flex-direction: column;
-  font-family: Roboto;
   background-color: color($color-lblue lightness(95%));
 }
   .App-inner {
@@ -40,6 +60,7 @@ html, body, #root, .App {
     display: flex;
     flex-direction: row;
     position: relative;
+    z-index: 2;
   }
     .App-main {
       flex-grow: 1;
@@ -100,3 +121,20 @@ html, body, #root, .App {
         border-radius: 3px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
+
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+
+  button {
+    font-size: 1.2em;
+    padding: 12px;
+    flex-grow: 1;
+
+    margin-right: 8px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}

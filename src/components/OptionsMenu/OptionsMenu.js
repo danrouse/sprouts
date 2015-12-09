@@ -4,7 +4,7 @@ import styles from './OptionsMenu.scss';
 export default class OptionsMenu extends Component {
   render() {
     return (
-      <div className="OptionsMenu">
+      <div className={'OptionsMenu' + (this.props.hidden ? ' hidden' : '')}>
         {Object.keys(this.props.options).map(option => {
           const value = this.props.options[option];
           return (
@@ -21,5 +21,6 @@ export default class OptionsMenu extends Component {
 
 OptionsMenu.propTypes = {
   onChange: PropTypes.func,
-  options: PropTypes.object
+  options: PropTypes.object,
+  hidden: PropTypes.bool
 }

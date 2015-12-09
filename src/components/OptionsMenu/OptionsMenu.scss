@@ -1,15 +1,23 @@
+@import '../variables.scss';
+
 .OptionsMenu {
   padding: 16px;
-  background-color: pink;
+  background-color: $color-tan;
 
   position: absolute;
   z-index: 10;
   top: 0;
   left: 0;
   height: 100%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  transition: transform $transition;
 
-  transform: translateX(-100%);
 
   /*resize: horizontal;
   overflow-y: scroll;*/
+
+  &.hidden {
+
+    transform: translateX(-100%);
+  }
 }
