@@ -1,5 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
+var precss = require('precss');
 
 module.exports = {
   devtool: 'source-map',
@@ -12,7 +14,6 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
@@ -29,6 +30,13 @@ module.exports = {
       test: /\.js$/,
       loaders: ['babel'],
       include: path.join(__dirname, 'src')
+    }, {
+      test: /\.scss$/,
+      loaders: ['style-loader', 'css-loader', 'postcss-loader'],
+      include: path.join(__dirname, 'src')
     }]
+  },
+  postcss: function() {
+    return [autoprefixer, precss];
   }
 };
