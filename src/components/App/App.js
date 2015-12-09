@@ -173,7 +173,7 @@ export default class App extends Component {
 
     return (
       <div className="App">
-        <TitleBar>🍂 Sprouts</TitleBar>
+        <TitleBar>🍂 Sprouts - Syntax Tree Builder</TitleBar>
         <ToolBar items={[
           { text: '☰ Options', onClick: this.clearTree.bind(this) },
           { text: '＋ New', onClick: this.clearTree.bind(this) },
@@ -188,6 +188,7 @@ export default class App extends Component {
           <OptionsMenu onChange={this.updateDisplayOption.bind(this)} options={this.state.displayOptions} />
           <div className="App-main">
             <IpaInput value={this.state.textInput}
+              showName={false}
               onChange={this.onTextChange.bind(this)} />
             <div className="App-tree">
               <TreeNode {...this.state.rootNode}

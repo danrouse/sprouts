@@ -84,6 +84,13 @@ html, body, #root, .App {
           }
         }
       }
+        .IpaInput__list {
+          li {
+            padding: 1em;
+            background-color: color($color-lblue lightness(+5%));
+          }
+          box-shadow: 0 0 4px #999;
+        }
       .App-tree {
         margin: 16px;
         padding: 8px;

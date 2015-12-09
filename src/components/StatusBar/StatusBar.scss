@@ -3,11 +3,27 @@
 .StatusBar {
   position: relative;
   z-index: 3;
-  padding: 8px 12px;
   font-size: 0.8em;
   min-height: calc((8px * 2) + 1em);
   border-top: 1px solid #bbb;
   box-shadow: 0 0 8px #999;
-  background-color: #ccc;
-  background-image: linear-gradient(to right, color($color-lbrown a(50%)) 0%, color($color-lbrown a(0%)) 100%);
+  background-color: $color-tan;
+  color: color($color-brown lightness(25%));
+
+  display: flex;
+  flex-direction: row;
+}
+
+.StatusBar-children {
+  flex-grow: 1;
+  padding: 8px 12px;
+}
+.StatusBar-version {
+  border-left: 1px solid color($color-brown lightness(70%));
+  color: color($color-brown lightness(45%));
+  padding: 8px 12px;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
