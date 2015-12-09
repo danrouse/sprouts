@@ -1,0 +1,15 @@
+.OptionsMenu {
+  padding: 16px;
+  background-color: pink;
+
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  height: 100%;
+
+  transform: translateX(-100%);
+
+  /*resize: horizontal;
+  overflow-y: scroll;*/
+}

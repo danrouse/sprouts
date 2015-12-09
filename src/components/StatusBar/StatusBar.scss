@@ -1,0 +1,13 @@
+@import '../variables.scss';
+
+.StatusBar {
+  position: relative;
+  z-index: 3;
+  padding: 8px 12px;
+  font-size: 0.8em;
+  min-height: calc((8px * 2) + 1em);
+  border-top: 1px solid #bbb;
+  box-shadow: 0 0 8px #999;
+  background-color: #ccc;
+  background-image: linear-gradient(to right, color($color-lbrown a(50%)) 0%, color($color-lbrown a(0%)) 100%);
+}

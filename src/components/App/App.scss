@@ -22,14 +22,74 @@ html{box-sizing:border-box}
  * happy little clean slate here
  */
 
+@import '../variables.scss';
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,400italic);
 
-html, body, #root, .app {
+html, body, #root, .App {
   height: 100%;
 }
 
-.app {
+.App {
   display: flex;
   flex-direction: column;
   font-family: Roboto;
+  background-color: color($color-lblue lightness(95%));
 }
+  .App-inner {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+  }
+    .App-main {
+      flex-grow: 1;
+    }
+      .IpaInput {
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 0 4px #bbb;
+        border: 1px solid $color-lblue;
+
+        &:before {
+          content: 'TREE:';
+          display: block;
+          position: absolute;
+          left: 16px;
+          top: 10px;
+          z-index: 3;
+          font-size: 0.8em;
+          font-weight: bold;
+          color: $color-brown;
+        }
+
+        input {
+          border: 0;
+          padding: 8px 16px 8px 60px;
+          background-color: $color-lblue;
+          color: color($color-brown lightness(40%));
+
+          &:focus {
+            background-color: color($color-blue lightness(88%));
+            color: color($color-brown lightness(10%));
+          }
+        }
+
+        &:hover {
+          box-shadow: 0 0 4px #999;
+          border: 1px solid $color-blue;
+
+          input {
+            background-color: color($color-blue lightness(88%));
+            color: color($color-brown lightness(20%));
+          }
+        }
+      }
+      .App-tree {
+        margin: 16px;
+        padding: 8px;
+        display: inline-block;
+        background-color: white;
+        border: 1px solid $color-lblue;
+        border-radius: 3px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }

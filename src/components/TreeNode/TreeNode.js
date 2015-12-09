@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import styles from './TreeNode.scss';
 
 export default class TreeNode extends Component {
   static propTypes = {
@@ -6,6 +7,7 @@ export default class TreeNode extends Component {
     body: PropTypes.string,
     childNodes: PropTypes.arrayOf(PropTypes.object),
     onChange: PropTypes.func,
+    onClick: PropTypes.func,
     selectedNode: PropTypes.number,
     ref: PropTypes.object,
 
@@ -45,6 +47,12 @@ export default class TreeNode extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  onClick(event) {
+    if(this.props.onClick) {
+      this.props.onClick.call(null, this.props, event);
+    }
   }
 
   /**
@@ -93,27 +101,28 @@ export default class TreeNode extends Component {
           x2={width / 2}
           y1={options.nameFontSize + options.yPadding}
           y2={options.nameFontSize + options.yPadding + options.nameToBodyLineHeight}
-          stroke="#ff0000"
+          stroke={options.nameToBodyLineColor}
           strokeWidth={options.nameToBodyLineWidth} />;
       }
     }
 
     const children = childNodes.map(child => {
       return [
-        <TreeNode {...child} options={options} />,
+        <TreeNode {...child} options={options} onClick={this.props.onClick} />,
         <line
           x1={nameCenter}
           x2={child.x + (child.width / 2)}
           y1={options.nameFontSize + options.yPadding}
           y2={options.nameFontSize + options.yPadding + options.nameToChildLineHeight}
-          stroke="#00ff00"
+          stroke={options.nameToChildLineColor}
           strokeWidth={options.nameToChildLineWidth} />
       ];
     });
 
     return (
       <svg key={index}
-        className={index === this.context.selectedNode.index ? 'selected' : ''}
+        className={'TreeNode' + (index === this.context.selectedNode.index ? ' selected' : '')}
+        onClick={this.onClick.bind(this)}
         x={x}
         y={y}
         width={width}

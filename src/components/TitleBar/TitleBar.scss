@@ -1,0 +1,11 @@
+@import '../variables.scss';
+
+.TitleBar {
+  position: relative;
+  z-index: 4;
+  padding: 8px 12px;
+  min-height: calc((8px * 2) + 1em);
+  box-shadow: 0 0 8px #999;
+  background-color: $color-lbrown;
+  background-image: linear-gradient(to left, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+}

@@ -1,6 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+
+import TitleBar from '../TitleBar';
+import ToolBar from '../ToolBar';
 import IpaInput from 'react-ipa-input';
+import OptionsMenu from '../OptionsMenu';
 import TreeNode from '../TreeNode';
+import StatusBar from '../StatusBar';
 
 import textToTree from '../../util/textToTree';
 import keyCodes from '../../util/keyCodes';
@@ -24,21 +29,23 @@ export default class App extends Component {
     super(props);
 
     const displayOptions = {
-      xPadding: 4,
-      yPadding: 4,
+      xPadding: 12,
+      yPadding: 6,
       shallowCenterName: true,
       showNameToBodyLines: true,
       showNameToChildLines: true,
-      nameToBodyLineWidth: 2,
-      nameToBodyLineHeight: 10,
-      nameToChildLineWidth: 2,
-      nameToChildLineHeight: 5,
-      nameFontSize: 16,
-      nameFontFamily: 'Arial',
-      nameFontColor: '#ff0000',
-      bodyFontSize: 14,
+      nameToBodyLineWidth: 1,
+      nameToBodyLineHeight: 20,
+      nameToBodyLineColor: '#000000',
+      nameToChildLineWidth: 1,
+      nameToChildLineHeight: 12,
+      nameToChildLineColor: '#000000',
+      nameFontSize: 20,
+      nameFontFamily: 'Times New Roman',
+      nameFontColor: '#000000',
+      bodyFontSize: 16,
       bodyFontFamily: 'Times New Roman',
-      bodyFontColor: '#00ff00'
+      bodyFontColor: '#000000'
     };
 
     const rootNode = textToTree(TEST_STR, displayOptions);
@@ -113,7 +120,6 @@ export default class App extends Component {
     });
   }
 
-
   onKeyDown(event) {
     const nodeName = event.target.nodeName;
     if(nodeName === 'INPUT' || nodeName === 'TEXTAREA' || nodeName === 'SELECT') {
@@ -141,6 +147,23 @@ export default class App extends Component {
 
   }
 
+  onNodeClicked(node, event) {
+    this.setState({
+      selectedNode: node
+    });
+    event.stopPropagation();
+  }
+
+  clearTree() {
+    const rootNode = textToTree('[]', this.state.displayOptions);
+
+    this.setState({
+      rootNode: rootNode,
+      selectedNode: rootNode,
+      textInput: '[]'
+    })
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown.bind(this));
     document.addEventListener('keyup', this.onKeyUp.bind(this));
@@ -149,48 +172,32 @@ export default class App extends Component {
   render() {
 
     return (
-      <div className="app">
-        <IpaInput value={this.state.textInput}
-          onChange={this.onTextChange.bind(this)} />
-        <TreeNode {...this.state.rootNode}
-          options={this.state.displayOptions}
-          onChange={this.onTreeChange.bind(this)} />
-
-        <div>Selected node: {this.state.selectedNode.name}</div>
-        <div>
-          <div>
-            <label htmlFor="xPadding">xPadding</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'xPadding')} value={this.state.xPadding} min="1" max="100" step="1" id="xPadding" />
-          </div>
-          <div>
-            <label htmlFor="yPadding">yPadding</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'yPadding')} value={this.state.yPadding}  min="1" max="100" step="1" id="yPadding" />
-          </div>
-          <div>
-            <label htmlFor="nameToBodyLineWidth">nameToBodyLineWidth</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'nameToBodyLineWidth')} value={this.state.nameToBodyLineWidth}  min="1" max="100" step="1" id="nameToBodyLineWidth" />
-          </div>
-          <div>
-            <label htmlFor="nameToBodyLineHeight">nameToBodyLineHeight</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'nameToBodyLineHeight')} value={this.state.nameToBodyLineHeight}  min="1" max="100" step="1" id="nameToBodyLineHeight" />
-          </div>
-          <div>
-            <label htmlFor="nameToChildLineWidth">nameToChildLineWidth</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'nameToChildLineWidth')} value={this.state.nameToChildLineWidth}  min="1" max="100" step="1" id="nameToChildLineWidth" />
-          </div>
-          <div>
-            <label htmlFor="nameToChildLineHeight">nameToChildLineHeight</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'nameToChildLineHeight')} value={this.state.nameToChildLineHeight}  min="1" max="100" step="1" id="nameToChildLineHeight" />
-          </div>
-          <div>
-            <label htmlFor="nameFontSize">nameFontSize</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'nameFontSize')} value={this.state.nameFontSize}  min="1" max="100" step="1" id="nameFontSize" />
-          </div>
-          <div>
-            <label htmlFor="bodyFontSize">bodyFontSize</label>
-            <input type="range" onChange={this.updateDisplayOption.bind(this, 'bodyFontSize')} value={this.state.bodyFontSize}  min="1" max="100" step="1" id="bodyFontSize" />
+      <div className="App">
+        <TitleBar>🍂 Sprouts</TitleBar>
+        <ToolBar items={[
+          { text: '☰ Options', onClick: this.clearTree.bind(this) },
+          { text: '＋ New', onClick: this.clearTree.bind(this) },
+          { text: '💾 Save', onClick: this.clearTree.bind(this) },
+          { text: '⛬ Share', onClick: this.clearTree.bind(this) },
+          'divider',
+          { text: 'New', onClick: this.clearTree.bind(this) },
+          { text: 'New', onClick: this.clearTree.bind(this) },
+          { text: 'New', onClick: this.clearTree.bind(this) },
+          ]}/>
+        <div className="App-inner">
+          <OptionsMenu onChange={this.updateDisplayOption.bind(this)} options={this.state.displayOptions} />
+          <div className="App-main">
+            <IpaInput value={this.state.textInput}
+              onChange={this.onTextChange.bind(this)} />
+            <div className="App-tree">
+              <TreeNode {...this.state.rootNode}
+                options={this.state.displayOptions}
+                onClick={this.onNodeClicked.bind(this)}
+                onChange={this.onTreeChange.bind(this)} />
+            </div>
           </div>
         </div>
+        <StatusBar>Selected node: {this.state.selectedNode.name}</StatusBar>
       </div>
     );
   }
